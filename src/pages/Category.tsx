@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Star, Heart, Sliders, ChevronDown, Download } from "lucide-react";
+import { Star, Heart, Sliders, ChevronDown } from "lucide-react";
 import httpHome from "../Api/httpHome"; // Import your API service
 
 const Category = () => {
