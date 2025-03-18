@@ -82,17 +82,19 @@ const Category = () => {
   const sortByFilter = (sortBy: string) => {
     setSortBy(sortBy);
     // console.log(products);
-    const sortedProducts = [...products].sort((a: any, b: any) => {
-      if (sortBy === "price_low") {
-        return a.product_price - b.product_price;
-      } else if (sortBy === "price_high") {
-        return b.product_price - a.product_price;
-      } else if (sortBy === "rating") {
-        return b.avg_ratting - a.avg_ratting;
-      } else {
-        return 0;
+    const sortedProducts = [...categoryProducts$.categoryProducts.get()].sort(
+      (a: any, b: any) => {
+        if (sortBy === "price_low") {
+          return a.product_price - b.product_price;
+        } else if (sortBy === "price_high") {
+          return b.product_price - a.product_price;
+        } else if (sortBy === "rating") {
+          return b.avg_ratting - a.avg_ratting;
+        } else {
+          return 0;
+        }
       }
-    });
+    );
     categoryProducts$.categoryProducts.set(sortedProducts);
     // setProducts(sortedProducts);
   };
