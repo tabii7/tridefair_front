@@ -13,5 +13,8 @@ const urls = {
   updateCartProduct: `${baseUrl}/qtyupdate`,
   cartCount: `${baseUrl}/cartcount`,
   searchProduct: `${baseUrl}/search`,
+  'orderhistory': `${baseUrl}/orderhistory`,
+  'wishlist': `${baseUrl}/getwishlist`,
+  'deletewishlist': `${baseUrl}/removefromwishlist`,
 };
 export default urls;

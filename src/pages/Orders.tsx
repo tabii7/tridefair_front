@@ -1,45 +1,69 @@
-import React from 'react';
+import React,{useEffect,useState}  from 'react';
 import { Link } from 'react-router-dom';
 import { Package, ChevronRight, Star, Download, Truck } from 'lucide-react';
+import httpHome from '../Api/httpHome';
+
 
 const Orders = () => {
-  // Mock orders data
-  const orders = [
-    {
-      id: 'ORD-2024-001',
-      date: '2024-02-07',
-      total: 599.98,
-      status: 'Delivered',
-      items: [
-        {
-          id: 1,
-          title: 'Premium Product 1',
-          price: 299.99,
-          image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop',
-          quantity: 2
-        }
-      ],
-      tracking: '1Z999AA1234567890',
-      deliveryDate: '2024-02-05'
-    },
-    {
-      id: 'ORD-2024-002',
-      date: '2024-02-01',
-      total: 199.99,
-      status: 'In Transit',
-      items: [
-        {
-          id: 2,
-          title: 'Premium Product 2',
-          price: 199.99,
-          image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop',
-          quantity: 1
-        }
-      ],
-      tracking: '1Z999AA1234567891',
-      deliveryDate: '2024-02-10'
-    }
-  ];
+
+  const [orders, setOrders] = useState([]);
+
+  const products =httpHome();
+
+  useEffect(() => {
+    const orders = async () => {
+      try {
+        const response = await products.prevOrders( 
+          {
+            "user_id": 1
+          }
+        );
+        setOrders(response?.data?.data || []);
+        console.log(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    orders();
+  }, []);
+
+  // const orders = [
+  //   {
+  //     id: 'ORD-2024-001',
+  //     date: '2024-02-07',
+  //     total: 599.98,
+  //     status: 'Delivered',
+  //     items: [
+  //       {
+  //         id: 1,
+  //         title: 'Premium Product 1',
+  //         price: 299.99,
+  //         image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop',
+  //         quantity: 2
+  //       }
+  //     ],
+  //     tracking: '1Z999AA1234567890',
+  //     deliveryDate: '2024-02-05'
+  //   },
+  //   {
+  //     id: 'ORD-2024-002',
+  //     date: '2024-02-01',
+  //     total: 199.99,
+  //     status: 'In Transit',
+  //     items: [
+  //       {
+  //         id: 2,
+  //         title: 'Premium Product 2',
+  //         price: 199.99,
+  //         image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop',
+  //         quantity: 1
+  //       }
+  //     ],
+  //     tracking: '1Z999AA1234567891',
+  //     deliveryDate: '2024-02-10'
+  //   }
+  // ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -66,7 +90,7 @@ const Orders = () => {
               <div className="flex justify-between items-start">
                 <div>
                   <div className="flex items-center space-x-4 mb-2">
-                    <h2 className="font-semibold">Order {order.id}</h2>
+                    <h2 className="font-semibold">Order {order.order_number}</h2>
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
                       {order.status}
                     </span>
@@ -76,7 +100,7 @@ const Orders = () => {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-lg">${order.total.toFixed(2)}</p>
+                  <p className="font-bold text-lg">{order.grand_total}</p>
                   <button className="text-blue-600 text-sm hover:underline flex items-center">
                     <Download className="h-4 w-4 mr-1" />
                     Invoice
@@ -86,16 +110,16 @@ const Orders = () => {
             </div>
 
             {/* Order Items */}
-            {order.items.map((item) => (
+            {/* {(Object.entries(order.product)).map((item) => (
               <div key={item.id} className="p-6 flex items-center space-x-6">
                 <img
-                  src={item.image}
-                  alt={item.title}
+                  src={item.product_image}
+                  alt={item.product_name}
                   className="w-20 h-20 object-cover rounded-lg"
                 />
                 <div className="flex-1">
                   <Link to={`/product/${item.id}`} className="font-medium hover:text-blue-600">
-                    {item.title}
+                    {item.product_name}
                   </Link>
                   <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
                   <div className="mt-2">
@@ -111,7 +135,33 @@ const Orders = () => {
                   <p className="font-bold">${item.price.toFixed(2)}</p>
                 </div>
               </div>
-            ))}
+            ))} */}
+            {order.product && (
+    <div key={order.product.id} className="p-6 flex items-center space-x-6">
+        <img
+            src={order.product.product_image || 'default-image-url'} // Fallback for missing image
+            alt={order.product.product_name}
+            className="w-20 h-20 object-cover rounded-lg"
+        />
+        <div className="flex-1">
+            <Link to={`/product/${order.product.id}`} className="font-medium hover:text-blue-600">
+                {order.product.product_name}
+            </Link>
+            <p className="text-sm text-gray-500">Quantity: {order.product.quantity}</p>
+            <div className="mt-2">
+                <button className="text-sm text-blue-600 hover:underline mr-4">
+                    Write a Review
+                </button>
+                <button className="text-sm text-blue-600 hover:underline">
+                    Buy Again
+                </button>
+            </div>
+        </div>
+        <div className="text-right">
+            <p className="font-bold">${order.product.price}</p>
+        </div>
+    </div>
+)}
 
             {/* Tracking Info */}
             <div className="border-t p-6">

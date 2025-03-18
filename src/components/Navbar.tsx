@@ -28,8 +28,52 @@ const Navbar = () => {
   const [showCategories, setShowCategories] = useState(false);
   const [showMainMenu, setShowMainMenu] = useState(false);
   const [categories, setcategories] = useState([]);
-  const [location] = useState("Buford 30519");
-  const [searchQuery, setSearchQuery] = useState<String>("");
+
+  const [location, setLocation] = useState("Fetching location..."); // Default loading message
+
+  useEffect(() => {
+    // Automatically fetch location when the component mounts
+    getLocation();
+  }, []); // Empty dependency array ensures this runs only once on mount
+
+  const getLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+
+          // Fetch address using reverse geocoding
+          const address = await getAddress(latitude, longitude);
+          setLocation(address); // Update location state with the fetched address
+        },
+        (error) => {
+          setLocation("Location unavailable"); // Handle errors
+        }
+      );
+    } else {
+      setLocation("Geolocation not supported"); // Handle lack of geolocation support
+    }
+  };
+
+  const getAddress = async (latitude, longitude) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+      );
+      const data = await response.json();
+      return data.display_name || "Address unavailable"; // Return the address or a fallback
+    } catch (error) {
+      return "Address unavailable"; // Handle fetch errors
+    }
+  };
+
+
+
+
+
+
+
+
   const Category = httpHome();
 
   useEffect(() => {
