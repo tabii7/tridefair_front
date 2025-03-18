@@ -8,12 +8,12 @@ const Category = () => {
   const [sortBy, setSortBy] = useState("featured");
   const [priceRange, setPriceRange] = useState("all");
   const [condition, setCondition] = useState("all");
-  const [products, setProducts] = useState([]); // State for products
+  const [products, setProducts] = useState([]); // State for filtered products
+  const [originalProducts, setOriginalProducts] = useState([]); // State for original products
   const [subcategories, setSubcategories] = useState([]); // State for subcategories
   const [loading, setLoading] = useState(true); // State for loading
   const [error, setError] = useState(null); // State for error handling
   const [category, setCategory] = useState([]);
-
   const productsApi = httpHome(); // Initialize your API service
 
   // Fetch category data
@@ -24,9 +24,9 @@ const Category = () => {
 
         if (response.status === 1) {
           // Ensure the data structure is correct
-
           if (response.data) {
             setProducts(response.data.products.data || []);
+            setOriginalProducts(response.data.products.data || []); // Store original products
             setSubcategories(response.data.subcategories || []);
             setCategory(response.data.category || []);
           } else {
@@ -66,7 +66,7 @@ const Category = () => {
 
   const sortByFilter = (sortBy: string) => {
     setSortBy(sortBy);
-    products.sort((a: any, b: any) => {
+    const sortedProducts = [...products].sort((a: any, b: any) => {
       if (sortBy === "price_low") {
         return a.product_price - b.product_price;
       } else if (sortBy === "price_high") {
@@ -77,27 +77,25 @@ const Category = () => {
         return 0;
       }
     });
+    setProducts(sortedProducts);
   };
 
   const priceRangeFilter = (val: string) => {
     setPriceRange(val);
-    // if (val == "all") {
-    //   setProducts(products);
-    // } else {
-    //   const minPrice = parseFloat(val.split("-")[0]);
-    //   const maxPrice = parseFloat(val.split("-")[1]);
-    //   console.log(minPrice, maxPrice);
-    //   console.log(products);
-    //   setProducts(
-    //     products.filter(
-    //       (product: any) =>
-    //         product.product_price >= minPrice &&
-    //         product.product.product_price <= maxPrice
-    //     )
-    //   );
-
-    // }
+    if (val === "all") {
+      // Reset to original products
+      setProducts(originalProducts);
+    } else {
+      const [minPrice, maxPrice] = val.split("-").map(Number);
+      const filteredProducts = originalProducts.filter(
+        (product) =>
+          product.product_price >= minPrice &&
+          (maxPrice ? product.product_price <= maxPrice : true)
+      );
+      setProducts(filteredProducts);
+    }
   };
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       {/* Category Header */}
