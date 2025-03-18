@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Star, Heart, Sliders, ChevronDown } from "lucide-react";
 import httpHome from "../Api/httpHome"; // Import your API service
+import { categoryProducts$ } from "../store/categoryProducts";
+import { observer } from "@legendapp/state/react";
 
 const Category = () => {
   const { id } = useParams();
@@ -25,8 +27,11 @@ const Category = () => {
         if (response.status === 1) {
           // Ensure the data structure is correct
           if (response.data) {
-            setProducts(response.data.products.data || []);
+            // setProducts(response.data.products.data || []);
             setOriginalProducts(response.data.products.data || []); // Store original products
+            categoryProducts$.categoryProducts.set(
+              response.data.products.data || []
+            );
             setSubcategories(response.data.subcategories || []);
             setCategory(response.data.category || []);
           } else {
@@ -50,6 +55,13 @@ const Category = () => {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8">
         <p>Loading...</p>
+      </div>
+    );
+  }
+  if (categoryProducts$?.categoryProducts?.get().length == 0) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <p>No Product Found</p>
       </div>
     );
   }
@@ -84,14 +96,18 @@ const Category = () => {
     setPriceRange(val);
     if (val === "all") {
       // Reset to original products
-      setProducts(originalProducts);
+      // setProducts(originalProducts);
+      setProducts(categoryProducts$.categoryProducts.get());
     } else {
       const [minPrice, maxPrice] = val.split("-").map(Number);
-      const filteredProducts = originalProducts.filter(
-        (product) =>
-          product.product_price >= minPrice &&
-          (maxPrice ? product.product_price <= maxPrice : true)
-      );
+      // const filteredProducts = originalProducts.filter(
+      const filteredProducts = categoryProducts$?.categoryProducts
+        ?.get()
+        .filter(
+          (product) =>
+            product.product_price >= minPrice &&
+            (maxPrice ? product.product_price <= maxPrice : true)
+        );
       setProducts(filteredProducts);
     }
   };
@@ -240,7 +256,7 @@ const Category = () => {
         {/* Products Grid */}
         <div className="flex-1">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product) => (
+            {categoryProducts$?.categoryProducts?.get()?.map((product) => (
               <div
                 key={product.id}
                 className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow"
@@ -296,4 +312,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default observer(Category);

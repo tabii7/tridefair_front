@@ -17,7 +17,7 @@ function httpHome() {
     }
   };
 
-  const productsDetails = async (id) => {
+  const productsDetails = async (id: String | Number) => {
     let requestBody = {
       product_id: id,
     };
@@ -39,7 +39,7 @@ function httpHome() {
     }
   };
 
-  const categoryProducts = async (id) => {
+  const categoryProducts = async (id: String | Number) => {
     let requestBody = {
       category_id: id,
     };
@@ -100,6 +100,14 @@ function httpHome() {
       console.log(error);
     }
   };
+  const searchProducts = async (requestBody: any) => {
+    try {
+      const response = await postApi.postApi(urls.searchProduct, requestBody);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return {
     feauredProducts,
     categories,
@@ -110,6 +118,7 @@ function httpHome() {
     deleteCartProduct,
     updateCartProduct,
     getCartCount,
+    searchProducts,
   };
 }
 
