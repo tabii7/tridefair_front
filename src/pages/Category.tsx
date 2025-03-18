@@ -27,7 +27,7 @@ const Category = () => {
         if (response.status === 1) {
           // Ensure the data structure is correct
           if (response.data) {
-            // setProducts(response.data.products.data || []);
+            setProducts(response.data.products.data || []);
             setOriginalProducts(response.data.products.data || []); // Store original products
             categoryProducts$.categoryProducts.set(
               response.data.products.data || []
@@ -58,7 +58,10 @@ const Category = () => {
       </div>
     );
   }
-  if (categoryProducts$?.categoryProducts?.get().length == 0) {
+  if (
+    categoryProducts$?.categoryProducts?.get().length == 0 &&
+    categoryProducts$?.searchQuery?.get()
+  ) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8">
         <p>No Product Found</p>
@@ -78,6 +81,7 @@ const Category = () => {
 
   const sortByFilter = (sortBy: string) => {
     setSortBy(sortBy);
+    // console.log(products);
     const sortedProducts = [...products].sort((a: any, b: any) => {
       if (sortBy === "price_low") {
         return a.product_price - b.product_price;
@@ -89,15 +93,15 @@ const Category = () => {
         return 0;
       }
     });
-    setProducts(sortedProducts);
+    categoryProducts$.categoryProducts.set(sortedProducts);
+    // setProducts(sortedProducts);
   };
 
   const priceRangeFilter = (val: string) => {
+    categoryProducts$.searchQuery.set(false);
     setPriceRange(val);
     if (val === "all") {
-      // Reset to original products
-      // setProducts(originalProducts);
-      setProducts(categoryProducts$.categoryProducts.get());
+      categoryProducts$.categoryProducts.set(originalProducts);
     } else {
       const [minPrice, maxPrice] = val.split("-").map(Number);
       // const filteredProducts = originalProducts.filter(
@@ -108,7 +112,8 @@ const Category = () => {
             product.product_price >= minPrice &&
             (maxPrice ? product.product_price <= maxPrice : true)
         );
-      setProducts(filteredProducts);
+      // setProducts(filteredProducts);
+      categoryProducts$.categoryProducts.set(filteredProducts);
     }
   };
 
