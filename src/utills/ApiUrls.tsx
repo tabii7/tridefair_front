@@ -12,5 +12,6 @@ const urls = {
   deleteCartProduct: `${baseUrl}/deleteproduct`,
   updateCartProduct: `${baseUrl}/qtyupdate`,
   cartCount: `${baseUrl}/cartcount`,
+  searchProduct: `${baseUrl}/search`,
 };
 export default urls;

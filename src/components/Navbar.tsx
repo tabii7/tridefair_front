@@ -22,12 +22,14 @@ import {
 } from "lucide-react";
 import { addToCart$ } from "../store/addToCart";
 import { observer } from "@legendapp/state/react";
+import { categoryProducts$ } from "../store/categoryProducts";
 const Navbar = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [showMainMenu, setShowMainMenu] = useState(false);
   const [categories, setcategories] = useState([]);
   const [location] = useState("Buford 30519");
+  const [searchQuery, setSearchQuery] = useState<String>("");
   const Category = httpHome();
 
   useEffect(() => {
@@ -73,6 +75,21 @@ const Navbar = () => {
       ],
     },
   ];
+
+  const searchproduct = async (query: String) => {
+    let requestBody = {
+      search_query: query,
+    };
+    try {
+      await Category.searchProducts(requestBody).then((response) => {
+        // setcategories(response?.data?.data || []);
+        categoryProducts$.categoryProducts.set(response?.data?.data || []);
+        categoryProducts$.searchQuery.set(true);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <nav className="bg-blue-900 text-white">
@@ -223,11 +240,16 @@ const Navbar = () => {
             </div>
             <div className="flex-1 relative">
               <input
+                name="search"
+                onChange={(e) => setSearchQuery(e.target.value)}
                 type="text"
                 placeholder="Search for anything"
                 className="w-full h-10 px-4 text-gray-900 focus:outline-none border-0 rounded-r-lg"
               />
-              <Search className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Search
+                onClick={(e) => searchproduct(searchQuery)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 cursor-pointer hover:text-gray-500"
+              />
             </div>
           </div>
         </div>
