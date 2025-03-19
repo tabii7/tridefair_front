@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import httpHome from "../Api/httpHome";
 import {
   Search,
@@ -30,7 +30,7 @@ const Navbar = () => {
   const [categories, setcategories] = useState([]);
 
   const [location, setLocation] = useState("Fetching location..."); // Default loading message
-
+  const navigate = useNavigate();
   useEffect(() => {
     // Automatically fetch location when the component mounts
     getLocation();
@@ -66,13 +66,6 @@ const Navbar = () => {
       return "Address unavailable"; // Handle fetch errors
     }
   };
-
-
-
-
-
-
-
 
   const Category = httpHome();
 
@@ -240,7 +233,13 @@ const Navbar = () => {
                     <Settings className="h-4 w-4 mr-2" />
                     <span>Settings</span>
                   </Link>
-                  <button className="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50">
+                  <button
+                    onClick={() => {
+                      localStorage.removeItem("trideFairToken");
+                      navigate("/login");
+                    }}
+                    className="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"
+                  >
                     <LogOut className="h-4 w-4 mr-2" />
                     <span>Sign Out</span>
                   </button>
