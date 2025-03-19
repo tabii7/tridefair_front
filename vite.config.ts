@@ -1,20 +1,19 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
-    exclude: ['lucide-react'],
+    exclude: ["lucide-react"],
   },
-
-  // server: {
-  //   proxy: {
-  //     '/api': {
-  //       target: 'https://tridefair.com',
-  //       changeOrigin: true,
-  //       //rewrite: (path) => path.replace(/^\/api/, ''),
-  //     },
-  //   },
-  // },
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: "assets/[name].js",
+        chunkFileNames: "assets/[name]-[hash].js",
+        assetFileNames: "assets/[name][extname]", // Remove hash from CSS
+      },
+    },
+  },
 });

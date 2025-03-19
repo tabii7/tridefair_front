@@ -31,6 +31,7 @@ const Navbar = () => {
 
   const [location, setLocation] = useState("Fetching location..."); // Default loading message
   const navigate = useNavigate();
+
   useEffect(() => {
     // Automatically fetch location when the component mounts
     getLocation();
@@ -236,6 +237,8 @@ const Navbar = () => {
                   <button
                     onClick={() => {
                       localStorage.removeItem("trideFairToken");
+                      localStorage.removeItem("trideFairUserId");
+                      localStorage.removeItem("trideFairUser");
                       navigate("/login");
                     }}
                     className="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"

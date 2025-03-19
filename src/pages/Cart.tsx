@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus, CreditCard, Truck } from "lucide-react";
 import httpHome from "../Api/httpHome";
 import { addToCart$ } from "../store/addToCart";
@@ -7,15 +7,20 @@ import { addToCart$ } from "../store/addToCart";
 const Cart = () => {
   const api = httpHome();
   // Mock cart items
+  const navigate = useNavigate();
   const [items, setItems] = useState([]) as any;
 
   useEffect(() => {
-    api
-      .getCart({ user_id: localStorage.getItem("trideFairUserId") })
-      .then((res) => {
-        setItems(res?.data);
-        addToCart$.cartItems.set(res?.data?.length);
-      });
+    if (localStorage.getItem("trideFairToken")) {
+      api
+        .getCart({ user_id: localStorage.getItem("trideFairUserId") })
+        .then((res) => {
+          setItems(res?.data);
+          addToCart$.cartItems.set(res?.data?.length);
+        });
+    } else {
+      navigate("/login");
+    }
   }, []);
   const updateQuantity = (id: number, change: number) => {
     api

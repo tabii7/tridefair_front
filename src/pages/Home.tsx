@@ -20,7 +20,6 @@ const Home = () => {
         const response = await products.feauredProducts();
         categoryProducts$.categoryProducts.set(response?.data?.data || []);
         setFeaturedProducts(response?.data?.data || []);
-        console.log(response);
       } catch (error) {
         console.log(error);
       }
