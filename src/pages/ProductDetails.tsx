@@ -34,7 +34,7 @@ const ProductDetails = () => {
   const addToCart = async () => {
     try {
       const response = await products.addToCart({
-        user_id: 1,
+        user_id: localStorage.getItem("trideFairUserId"),
         product_id: id,
         qty: quantity,
         price: product?.data?.product_price,

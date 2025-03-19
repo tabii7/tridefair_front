@@ -10,15 +10,17 @@ const Cart = () => {
   const [items, setItems] = useState([]) as any;
 
   useEffect(() => {
-    api.getCart({ user_id: 1 }).then((res) => {
-      setItems(res?.data);
-      addToCart$.cartItems.set(res?.data?.length);
-    });
+    api
+      .getCart({ user_id: localStorage.getItem("trideFairUserId") })
+      .then((res) => {
+        setItems(res?.data);
+        addToCart$.cartItems.set(res?.data?.length);
+      });
   }, []);
   const updateQuantity = (id: number, change: number) => {
     api
       .updateCartProduct({
-        user_id: 1,
+        user_id: localStorage.getItem("trideFairUserId"),
         cart_id: id,
         // qty: change,
         // add the Quantity in previous state
@@ -48,7 +50,7 @@ const Cart = () => {
   const removeItem = (id: number) => {
     api
       .deleteCartProduct({
-        user_id: 1,
+        user_id: localStorage.getItem("trideFairUserId"),
         cart_id: id,
       })
       .then((res) => {
@@ -58,13 +60,13 @@ const Cart = () => {
         }
       });
   };
-  const subtotal = items.reduce(
+  const subtotal = (items ?? []).reduce(
     (sum: number, item: any) =>
       sum + (Number(item.price) || 0) * (Number(item.qty) || 1),
     0
   );
 
-  const shipping = items.reduce(
+  const shipping = (items ?? []).reduce(
     (sum: number, item: any) => sum + (Number(item.shipping_cost) || 0),
     0
   );
@@ -80,7 +82,7 @@ const Cart = () => {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Cart Items */}
         <div className="flex-1">
-          {items.length > 0 ? (
+          {items?.length > 0 ? (
             <div className="bg-white rounded-lg shadow">
               {items.map((item: any, index: any) => (
                 <div
@@ -152,7 +154,7 @@ const Cart = () => {
         </div>
 
         {/* Order Summary */}
-        {items.length > 0 && (
+        {items?.length > 0 && (
           <div className="w-full lg:w-96">
             <div className="bg-white rounded-lg shadow p-6">
               <h2 className="text-xl font-bold mb-4">Order Summary</h2>

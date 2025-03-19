@@ -34,7 +34,7 @@ function App() {
   useEffect(() => {
     if (isAuthenticated()) {
       api
-        .getCartCount({ user_id: 1 }) // Replace with dynamic user_id
+        .getCartCount({ user_id: localStorage.getItem("trideFairUserId") }) // Replace with dynamic user_id
         .then((response) => {
           if (response?.status === 1) {
             addToCart$.cartItems.set(response?.cartqty);

@@ -18,6 +18,7 @@ const Login = () => {
       .then((res) => {
         if (res.status === 1) {
           localStorage.setItem("trideFairToken", res?.token);
+          localStorage.setItem("trideFairUserId", res?.data?.id);
           navigate("/");
         } else {
         }

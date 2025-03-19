@@ -1,30 +1,26 @@
-import React,{useEffect,useState}  from 'react';
-import { Link } from 'react-router-dom';
-import { Package, ChevronRight, Star, Download, Truck } from 'lucide-react';
-import httpHome from '../Api/httpHome';
-
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Package, ChevronRight, Star, Download, Truck } from "lucide-react";
+import httpHome from "../Api/httpHome";
 
 const Orders = () => {
-
   const [orders, setOrders] = useState([]);
 
-  const products =httpHome();
+  const products = httpHome();
 
   useEffect(() => {
     const orders = async () => {
       try {
-        const response = await products.prevOrders( 
-          {
-            "user_id": 1
-          }
-        );
+        const response = await products.prevOrders({
+          user_id: localStorage.getItem("trideFairUserId"),
+        });
         setOrders(response?.data?.data || []);
         console.log(response.data.data);
       } catch (error) {
         console.log(error);
       }
     };
-  
+
     orders();
   }, []);
 
@@ -67,14 +63,14 @@ const Orders = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Delivered':
-        return 'bg-green-100 text-green-800';
-      case 'In Transit':
-        return 'bg-blue-100 text-blue-800';
-      case 'Processing':
-        return 'bg-yellow-100 text-yellow-800';
+      case "Delivered":
+        return "bg-green-100 text-green-800";
+      case "In Transit":
+        return "bg-blue-100 text-blue-800";
+      case "Processing":
+        return "bg-yellow-100 text-yellow-800";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -90,8 +86,14 @@ const Orders = () => {
               <div className="flex justify-between items-start">
                 <div>
                   <div className="flex items-center space-x-4 mb-2">
-                    <h2 className="font-semibold">Order {order.order_number}</h2>
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
+                    <h2 className="font-semibold">
+                      Order {order.order_number}
+                    </h2>
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                        order.status
+                      )}`}
+                    >
                       {order.status}
                     </span>
                   </div>
@@ -137,31 +139,39 @@ const Orders = () => {
               </div>
             ))} */}
             {order.product && (
-    <div key={order.product.id} className="p-6 flex items-center space-x-6">
-        <img
-            src={order.product.product_image || 'default-image-url'} // Fallback for missing image
-            alt={order.product.product_name}
-            className="w-20 h-20 object-cover rounded-lg"
-        />
-        <div className="flex-1">
-            <Link to={`/product/${order.product.id}`} className="font-medium hover:text-blue-600">
-                {order.product.product_name}
-            </Link>
-            <p className="text-sm text-gray-500">Quantity: {order.product.quantity}</p>
-            <div className="mt-2">
-                <button className="text-sm text-blue-600 hover:underline mr-4">
-                    Write a Review
-                </button>
-                <button className="text-sm text-blue-600 hover:underline">
-                    Buy Again
-                </button>
-            </div>
-        </div>
-        <div className="text-right">
-            <p className="font-bold">${order.product.price}</p>
-        </div>
-    </div>
-)}
+              <div
+                key={order.product.id}
+                className="p-6 flex items-center space-x-6"
+              >
+                <img
+                  src={order.product.product_image || "default-image-url"} // Fallback for missing image
+                  alt={order.product.product_name}
+                  className="w-20 h-20 object-cover rounded-lg"
+                />
+                <div className="flex-1">
+                  <Link
+                    to={`/product/${order.product.id}`}
+                    className="font-medium hover:text-blue-600"
+                  >
+                    {order.product.product_name}
+                  </Link>
+                  <p className="text-sm text-gray-500">
+                    Quantity: {order.product.quantity}
+                  </p>
+                  <div className="mt-2">
+                    <button className="text-sm text-blue-600 hover:underline mr-4">
+                      Write a Review
+                    </button>
+                    <button className="text-sm text-blue-600 hover:underline">
+                      Buy Again
+                    </button>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="font-bold">${order.product.price}</p>
+                </div>
+              </div>
+            )}
 
             {/* Tracking Info */}
             <div className="border-t p-6">

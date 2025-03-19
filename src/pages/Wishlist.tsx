@@ -13,7 +13,7 @@ const Wishlist = () => {
     const fetchWishlist = async () => {
       try {
         const response = await products.wishlist({
-          user_id: 1, // Replace with dynamic user ID if needed
+          user_id: localStorage.getItem("trideFairUserId"), // Replace with dynamic user ID if needed
         });
         setItems(response?.data?.data || []);
       } catch (error) {
@@ -29,7 +29,7 @@ const Wishlist = () => {
     try {
       // Call the delete API
       await products.deletewishlist({
-        user_id: 1, // Replace with dynamic user ID if needed
+        user_id: localStorage.getItem("trideFairUserId"), // Replace with dynamic user ID if needed
         product_id: productId, // Pass the product ID to delete
       });
 
@@ -97,8 +97,7 @@ const Wishlist = () => {
               {/* Price Section */}
               <div className="mb-4">
                 <span className="text-xl font-bold">
-                  ${item.discounted_price}{" "}
-                  {/* Display discounted price */}
+                  ${item.discounted_price} {/* Display discounted price */}
                 </span>
                 {item.product_price > item.discounted_price && ( // Show original price if discounted
                   <span className="ml-2 text-sm text-gray-500 line-through">
