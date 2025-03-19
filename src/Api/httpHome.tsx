@@ -109,40 +109,51 @@ function httpHome() {
     }
   };
 
-
   const prevOrders = async (requestBody: any) => {
     try {
-      const response = await postApi.postApi(urls.orderhistory , requestBody);
+      const response = await postApi.postApi(urls.orderhistory, requestBody);
       return response;
-    }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
   };
-
 
   const wishlist = async (requestBody: any) => {
     try {
       const response = await postApi.postApi(urls.wishlist, requestBody);
       return response;
-      }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
   };
-
 
   const deletewishlist = async (requestBody: any) => {
     try {
       const response = await postApi.postApi(urls.deletewishlist, requestBody);
       return response;
-      }
-    catch (error) {
+    } catch (error) {
       console.log(error);
     }
   };
 
-
+  // login
+  const login = async (requestBody: any) => {
+    try {
+      const response = await postApi.postApi(urls.login, requestBody);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // signup
+  const signUp = async (requestBody: any) => {
+    try {
+      const response = await postApi.postApi(urls.signUp, requestBody);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return {
     feauredProducts,
@@ -157,7 +168,9 @@ function httpHome() {
     searchProducts,
     prevOrders,
     wishlist,
-    deletewishlist
+    deletewishlist,
+    login,
+    signUp,
   };
 }
 

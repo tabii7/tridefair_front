@@ -39,49 +39,6 @@ const Home = () => {
       </div>
     );
   }
-  // Featured products with real data
-  //  const featuredProducts = [
-  //   {
-  //     id: 1,
-  //     title: "6-in-1 Wireless Charging Station",
-  //     price: 11.29,
-  //     originalPrice: 15.99,
-  //     image: "https://images.unsplash.com/photo-1622445275463-afa2ab738c34?w=500&auto=format&fit=crop",
-  //     rating: 4.8,
-  //     reviews: 16261,
-  //     discount: 30
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "3-in-1 Magnetic Wireless Charger",
-  //     price: 15.77,
-  //     originalPrice: 25.99,
-  //     image: "https://images.unsplash.com/photo-1633071978437-68bd38e054da?w=500&auto=format&fit=crop",
-  //     rating: 4.7,
-  //     reviews: 9550,
-  //     discount: 40
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "30000mAh Power Bank",
-  //     price: 8.13,
-  //     originalPrice: 12.99,
-  //     image: "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=500&auto=format&fit=crop",
-  //     rating: 4.6,
-  //     reviews: 4438,
-  //     discount: 35
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "4-in-1 Fast Charging Station",
-  //     price: 5.31,
-  //     originalPrice: 8.99,
-  //     image: "https://images.unsplash.com/photo-1621957837173-2a4f8097c4ea?w=500&auto=format&fit=crop",
-  //     rating: 4.5,
-  //     reviews: 2927,
-  //     discount: 40
-  //   }
-  //  ];
 
   // Top deals with real products
   const deals = [
