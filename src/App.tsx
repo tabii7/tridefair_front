@@ -9,6 +9,8 @@ import Cart from "./pages/Cart";
 import Account from "./pages/Account";
 import Orders from "./pages/Orders";
 import Wishlist from "./pages/Wishlist";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import SellerRegistration from "./pages/SellerRegistration";
 import { addToCart$ } from "./store/addToCart";
 import httpHome from "./Api/httpHome";
@@ -40,6 +42,9 @@ function App() {
             <Route path="/orders" element={<Orders />} />
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/sell" element={<SellerRegistration />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+
           </Routes>
         </main>
         <Footer />
