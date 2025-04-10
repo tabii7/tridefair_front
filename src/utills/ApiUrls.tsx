@@ -1,6 +1,11 @@
 // import { all } from "axios";
 
+<<<<<<< Updated upstream
 const baseUrl = "http://192.168.100.48:8000/api";
+=======
+// const baseUrl = "http://192.168.100.48:8000/api";
+const baseUrl = "https://tridefair.com/api";
+>>>>>>> Stashed changes
 
 const urls = {
   signUp: `${baseUrl}/register`,
