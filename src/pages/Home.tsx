@@ -76,9 +76,9 @@ const Home = () => {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className=" mx-auto px-4 py-8">
       {/* Hero Section */}
-      <div className="relative h-[400px] rounded-lg overflow-hidden mb-8">
+      <div className="relative h-[400px]  overflow-hidden mb-8">
         <img
           src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?w=1200&auto=format&fit=crop"
           alt="Electronics and Gadgets"
@@ -144,7 +144,8 @@ const Home = () => {
               <Link to={`/product/${product.id}`}>
                 <div className="relative">
                   <img
-                    src="https://tridefair.com/storage/images/products/product-67b2fb8887d12.jpg"
+                    src={'https://tridefair.com/storage/images/products/' +
+                      product?.productimage?.image || ""}
                     alt={product.product_name}
                     className="w-full h-48 object-cover"
                   />

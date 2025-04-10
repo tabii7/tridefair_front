@@ -19,6 +19,7 @@ import Register from "./pages/Register";
 import SellerRegistration from "./pages/SellerRegistration";
 import { addToCart$ } from "./store/addToCart";
 import httpHome from "./Api/httpHome";
+import CheckoutPage from './pages/Checkout';
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("trideFairToken");
@@ -57,6 +58,7 @@ function App() {
               path="/login"
               element={isAuthenticated() ? <Navigate to="/" /> : <Login />}
             />
+            <Route path="/checkout" element={<CheckoutPage />} />
             <Route
               path="/register"
               element={isAuthenticated() ? <Navigate to="/" /> : <Register />}
@@ -77,6 +79,11 @@ function App() {
               path="/wishlist"
               element={<PrivateRoute element={<Wishlist />} />}
             />
+
+{/* <Route
+              path="/checkout"
+              element={<PrivateRoute element={<CheckoutPage />} />}
+            /> */}
 
             {/* Catch-all Route - Redirect to Home */}
             <Route path="*" element={<Navigate to="/" />} />
