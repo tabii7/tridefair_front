@@ -11,11 +11,15 @@ import {
   Shield,
   LogOut,
 } from "lucide-react";
+import { addToCart$ } from "../store/addToCart";
+import httpHome from "../Api/httpHome";
+import { observer } from "@legendapp/state/react";
 
 const Account = () => {
   const [location, setLocation] = useState("Fetching location..."); // Default loading message
   const navigate = useNavigate();
   const loginUser = JSON.parse(localStorage.getItem("trideFairUser") || "{}");
+  const api = httpHome();
   const user = {
     name: loginUser?.name,
     email: loginUser?.email,
@@ -70,6 +74,13 @@ const Account = () => {
       setLocation("Geolocation not supported"); // Handle lack of geolocation support
     }
   };
+  const handleSignOut = () => {
+    localStorage.removeItem("trideFairToken");
+    localStorage.removeItem("trideFairUserId");
+    localStorage.removeItem("trideFairUser");
+    addToCart$.cartItems.set(0);
+    navigate("/login");
+  };
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex flex-col lg:flex-row gap-8">
@@ -96,12 +107,7 @@ const Account = () => {
               </div>
               <button
                 className="w-full mt-4 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 flex items-center justify-center"
-                onClick={() => {
-                  localStorage.removeItem("trideFairToken");
-                  localStorage.removeItem("trideFairUserId");
-                  localStorage.removeItem("trideFairUser");
-                  navigate("/login");
-                }}
+                onClick={() => handleSignOut()}
               >
                 <LogOut className="h-5 w-5 mr-2" />
                 Sign Out
@@ -139,4 +145,4 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default observer(Account);

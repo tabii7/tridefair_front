@@ -128,7 +128,13 @@ const Navbar = () => {
       console.log(error);
     }
   };
-
+  const handleSignOut = () => {
+    localStorage.removeItem("trideFairToken");
+    localStorage.removeItem("trideFairUserId");
+    localStorage.removeItem("trideFairUser");
+    addToCart$.cartItems.set(0);
+    navigate("/login");
+  };
   return (
     <nav className="bg-blue-900 text-white">
       <div className="">
@@ -184,45 +190,48 @@ const Navbar = () => {
             </div>
           </div>
           {/* Search Bar */}
-        <div className="px-4 py-3 flex items-center space-x-4 " style={{"width": "70%"}}>
-          <div className="flex-1 flex">
-            <div className="relative">
-              <button
-                className="h-10 px-4 bg-blue-700 text-white rounded-l-lg border-r border-blue-600 flex items-center space-x-1 hover:bg-blue-600"
-                onClick={() => setShowCategories(!showCategories)}
-              >
-                <span>All Categories</span>
-                <ChevronDown className="h-4 w-4" />
-              </button>
-              {showCategories && (
-                <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                  {categories.map((category) => (
-                    <Link
-                      key={category.id}
-                      to={`/category/${category.id}`}
-                      className="block px-4 py-2 text-gray-700 hover:bg-blue-50"
-                    >
-                      {category.category_name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className="flex-1 relative">
-              <input
-                name="search"
-                onChange={(e) => setSearchQuery(e.target.value)}
-                type="text"
-                placeholder="Search for anything"
-                className="w-full h-10 px-4 text-gray-900 focus:outline-none border-0 rounded-r-lg"
-              />
-              <Search
-                onClick={(e) => searchproduct(searchQuery)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 cursor-pointer hover:text-gray-500"
-              />
+          <div
+            className="px-4 py-3 flex items-center space-x-4 "
+            style={{ width: "70%" }}
+          >
+            <div className="flex-1 flex">
+              <div className="relative">
+                <button
+                  className="h-10 px-4 bg-blue-700 text-white rounded-l-lg border-r border-blue-600 flex items-center space-x-1 hover:bg-blue-600"
+                  onClick={() => setShowCategories(!showCategories)}
+                >
+                  <span>All Categories</span>
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+                {showCategories && (
+                  <div className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                    {categories.map((category) => (
+                      <Link
+                        key={category.id}
+                        to={`/category/${category.id}`}
+                        className="block px-4 py-2 text-gray-700 hover:bg-blue-50"
+                      >
+                        {category.category_name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="flex-1 relative">
+                <input
+                  name="search"
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  type="text"
+                  placeholder="Search for anything"
+                  className="w-full h-10 px-4 text-gray-900 focus:outline-none border-0 rounded-r-lg"
+                />
+                <Search
+                  onClick={(e) => searchproduct(searchQuery)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 cursor-pointer hover:text-gray-500"
+                />
+              </div>
             </div>
           </div>
-        </div>
           <div className="flex items-center space-x-6">
             <Link
               to="/sell"
@@ -271,12 +280,13 @@ const Navbar = () => {
                     <span>Settings</span>
                   </Link>
                   <button
-                    onClick={() => {
-                      localStorage.removeItem("trideFairToken");
-                      localStorage.removeItem("trideFairUserId");
-                      localStorage.removeItem("trideFairUser");
-                      navigate("/login");
-                    }}
+                    // onClick={() => {
+                    //   localStorage.removeItem("trideFairToken");
+                    //   localStorage.removeItem("trideFairUserId");
+                    //   localStorage.removeItem("trideFairUser");
+                    //   navigate("/login");
+                    // }}
+                    onClick={() => handleSignOut()}
                     className="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"
                   >
                     <LogOut className="h-4 w-4 mr-2" />
@@ -295,10 +305,11 @@ const Navbar = () => {
           </div>
         </div>
 
-       
-
         {/* Category Navigation */}
-        <div className="px-4 py-2 flex items-center space-x-6 text-sm overflow-x-auto bg-blue-800" style={{"justifyContent": "center"}}>
+        <div
+          className="px-4 py-2 flex items-center space-x-6 text-sm overflow-x-auto bg-blue-800"
+          style={{ justifyContent: "center" }}
+        >
           {categories.slice(0, 10).map((category) => (
             <Link
               key={category.id}

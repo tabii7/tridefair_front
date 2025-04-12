@@ -4,6 +4,7 @@ import httpHome from "../Api/httpHome";
 import CustomAlerts from "../utills/customAlert/CustomAlerts";
 import { observer } from "@legendapp/state/react";
 import { error$ } from "../store/customErrors";
+import { addToCart$ } from "../store/addToCart";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -23,8 +24,15 @@ const Login = () => {
           localStorage.setItem("trideFairToken", res?.token);
           localStorage.setItem("trideFairUserId", res?.data?.id);
           localStorage.setItem("trideFairUser", JSON.stringify(res?.data));
-
           navigate("/");
+
+          api
+            .getCartCount({ user_id: localStorage.getItem("trideFairUserId") }) // Replace with dynamic user_id
+            .then((response) => {
+              if (response?.status === 1) {
+                addToCart$.cartItems.set(response?.cartqty);
+              }
+            });
         } else {
         }
       })
