@@ -19,7 +19,8 @@ import Register from "./pages/Register";
 import SellerRegistration from "./pages/SellerRegistration";
 import { addToCart$ } from "./store/addToCart";
 import httpHome from "./Api/httpHome";
-import CheckoutPage from './pages/Checkout';
+import CheckoutPage from "./pages/Checkout";
+import { error$ } from "./store/customErrors";
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("trideFairToken");
@@ -31,6 +32,7 @@ const PrivateRoute = ({ element }: { element: React.ReactNode }) => {
 
 function App() {
   const api = httpHome();
+  error$.message.set("");
 
   useEffect(() => {
     if (isAuthenticated()) {
@@ -80,7 +82,7 @@ function App() {
               element={<PrivateRoute element={<Wishlist />} />}
             />
 
-{/* <Route
+            {/* <Route
               path="/checkout"
               element={<PrivateRoute element={<CheckoutPage />} />}
             /> */}

@@ -22,6 +22,12 @@ const Cart = () => {
       navigate("/login");
     }
   }, []);
+
+  // Navugate to checkout page
+  const navigateToCheckout = () => {
+    navigate("/checkout");
+  };
+
   const updateQuantity = (id: number, change: number) => {
     api
       .updateCartProduct({
@@ -183,7 +189,10 @@ const Cart = () => {
                   </div>
                 </div>
               </div>
-              <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center">
+              <button
+                onClick={() => navigateToCheckout()}
+                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center"
+              >
                 <CreditCard className="h-5 w-5 mr-2" />
                 Proceed to Checkout
               </button>
