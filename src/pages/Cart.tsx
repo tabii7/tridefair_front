@@ -25,7 +25,18 @@ const Cart = () => {
 
   // Navugate to checkout page
   const navigateToCheckout = () => {
-    navigate("/checkout");
+    api
+      .order({
+        items,
+        user_id: localStorage.getItem("trideFairUserId"),
+      })
+      .then((res) => {
+        if (res?.status == 1) {
+          console.log("res", res);
+          // navigate("/checkout");
+        }
+      });
+    console.log("items", items);
   };
 
   const updateQuantity = (id: number, change: number) => {
@@ -174,14 +185,7 @@ const Cart = () => {
                   <span>Subtotal</span>
                   <span>${subtotal.toFixed(2)}</span>
                 </div>
-                {/* <div className="flex justify-between">
-                  <span>Shipping</span>
-                  <span className="text-green-600">Free</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Estimated Tax</span>
-                  <span>${tax.toFixed(2)}</span>
-                </div> */}
+
                 <div className="border-t pt-3 font-bold text-lg">
                   <div className="flex justify-between">
                     <span>Total</span>

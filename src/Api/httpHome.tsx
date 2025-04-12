@@ -5,6 +5,25 @@ import urls from "../utills/ApiUrls";
 function httpHome() {
   const postApi = usePostApi();
   const getApi = useGetApi();
+
+  // login
+  const login = async (requestBody: any) => {
+    try {
+      const response = await postApi.postApi(urls.login, requestBody);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // signup
+  const signUp = async (requestBody: any) => {
+    try {
+      const response = await postApi.postApi(urls.signUp, requestBody);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const feauredProducts = async () => {
     let requestBody = {
       type: "featured_products",
@@ -136,19 +155,9 @@ function httpHome() {
     }
   };
 
-  // login
-  const login = async (requestBody: any) => {
+  const order = async (requestBody: any) => {
     try {
-      const response = await postApi.postApi(urls.login, requestBody);
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  // signup
-  const signUp = async (requestBody: any) => {
-    try {
-      const response = await postApi.postApi(urls.signUp, requestBody);
+      const response = await postApi.postApi(urls.placeOrder, requestBody);
       return response;
     } catch (error) {
       console.log(error);
@@ -171,6 +180,7 @@ function httpHome() {
     deletewishlist,
     login,
     signUp,
+    order,
   };
 }
 
