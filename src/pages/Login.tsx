@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import httpHome from "../Api/httpHome";
+import CustomAlerts from "../utills/customAlert/CustomAlerts";
+import { observer } from "@legendapp/state/react";
+import { error$ } from "../store/customErrors";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -20,9 +23,13 @@ const Login = () => {
           localStorage.setItem("trideFairToken", res?.token);
           localStorage.setItem("trideFairUserId", res?.data?.id);
           localStorage.setItem("trideFairUser", JSON.stringify(res?.data));
+
           navigate("/");
         } else {
         }
+      })
+      .catch((err) => {
+        console.error(err);
       });
   };
 
@@ -61,7 +68,11 @@ const Login = () => {
           <button type="submit" style={styles.button}>
             Log In
           </button>
+          <div className="text-left text-red-700">
+            <CustomAlerts message={error$?.message?.get()} />
+          </div>
         </form>
+
         <p style={styles.footerText}>
           Don't have an account?{" "}
           <Link to="/Register" style={styles.link}>
@@ -155,4 +166,4 @@ const styles = {
   },
 };
 
-export default Login;
+export default observer(Login);

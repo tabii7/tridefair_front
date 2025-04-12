@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import httpHome from "../Api/httpHome";
 import { useNavigate } from "react-router-dom";
+import CustomAlerts from "../utills/customAlert/CustomAlerts";
+import { error$ } from "../store/customErrors";
+import { observer } from "@legendapp/state/react";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -22,10 +25,12 @@ const Register = () => {
     };
 
     api.signUp(data).then((res) => {
+      error$.message.set("");
+
       if (res.status === 1) {
         navigate("/login");
       } else {
-        alert(res.message.split(".")[1]);
+        error$.message.set(res?.message);
       }
     });
   };
@@ -108,6 +113,7 @@ const Register = () => {
           <button type="submit" style={styles.button}>
             Sign Up
           </button>
+          <CustomAlerts message={error$.message.get()} />
         </form>
         <p style={styles.footerText}>
           Already have an account?{" "}
@@ -202,4 +208,4 @@ const styles = {
   },
 };
 
-export default Register;
+export default observer(Register);
