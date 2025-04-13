@@ -21,5 +21,6 @@ const urls = {
   wishlist: `${baseUrl}/getwishlist`,
   deletewishlist: `${baseUrl}/removefromwishlist`,
   placeOrder: `${baseUrl}/order`,
+  checkOut: `${baseUrl}/checkout`,
 };
 export default urls;

@@ -22,6 +22,11 @@ import httpHome from "./Api/httpHome";
 import CheckoutPage from "./pages/Checkout";
 import { error$ } from "./store/customErrors";
 
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+const stripePromise = loadStripe(
+  "pk_live_51LO9wIAzUG7NporpyPNEiUGxD8919cadEmkIqHd1Bd3ASCAUtQ1yKj9gA6n7HJxjTuYTweDUqtXlqvvuvi2k1QLq00W0qRBbMW"
+);
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("trideFairToken");
 
@@ -47,53 +52,58 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-grow">
-          <Routes>
-            {/* Public Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/product/:id" element={<ProductDetails />} />
-            <Route path="/category/:id" element={<Category />} />
-            <Route
-              path="/login"
-              element={isAuthenticated() ? <Navigate to="/" /> : <Login />}
-            />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            <Route
-              path="/register"
-              element={isAuthenticated() ? <Navigate to="/" /> : <Register />}
-            />
-            <Route path="/sell" element={<SellerRegistration />} />
+    <Elements stripe={stripePromise}>
+      <Router>
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
+          <main className="flex-grow">
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/category/:id" element={<Category />} />
+              <Route
+                path="/login"
+                element={isAuthenticated() ? <Navigate to="/" /> : <Login />}
+              />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route
+                path="/register"
+                element={isAuthenticated() ? <Navigate to="/" /> : <Register />}
+              />
+              <Route path="/sell" element={<SellerRegistration />} />
 
-            {/* Protected Routes (Require Authentication) */}
-            <Route path="/cart" element={<PrivateRoute element={<Cart />} />} />
-            <Route
-              path="/account"
-              element={<PrivateRoute element={<Account />} />}
-            />
-            <Route
-              path="/orders"
-              element={<PrivateRoute element={<Orders />} />}
-            />
-            <Route
-              path="/wishlist"
-              element={<PrivateRoute element={<Wishlist />} />}
-            />
+              {/* Protected Routes (Require Authentication) */}
+              <Route
+                path="/cart"
+                element={<PrivateRoute element={<Cart />} />}
+              />
+              <Route
+                path="/account"
+                element={<PrivateRoute element={<Account />} />}
+              />
+              <Route
+                path="/orders"
+                element={<PrivateRoute element={<Orders />} />}
+              />
+              <Route
+                path="/wishlist"
+                element={<PrivateRoute element={<Wishlist />} />}
+              />
 
-            {/* <Route
+              {/* <Route
               path="/checkout"
               element={<PrivateRoute element={<CheckoutPage />} />}
             /> */}
 
-            {/* Catch-all Route - Redirect to Home */}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+              {/* Catch-all Route - Redirect to Home */}
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </Router>
+    </Elements>
   );
 }
 

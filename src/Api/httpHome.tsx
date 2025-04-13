@@ -163,6 +163,14 @@ function httpHome() {
       console.log(error);
     }
   };
+  const checkOut = async (requestBody: any) => {
+    try {
+      const response = await postApi.postApi(urls.checkOut, requestBody);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return {
     feauredProducts,
@@ -181,6 +189,7 @@ function httpHome() {
     login,
     signUp,
     order,
+    checkOut,
   };
 }
 

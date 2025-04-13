@@ -33,8 +33,8 @@ const Cart = () => {
       .then((res) => {
         if (res?.status == 1) {
           console.log("res", res);
-          // navigate("/checkout");
         }
+        navigate("/checkout");
       });
     console.log("items", items);
   };
