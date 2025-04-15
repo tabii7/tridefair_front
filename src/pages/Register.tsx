@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import httpHome from "../Api/httpHome";
 import { useNavigate } from "react-router-dom";
+import CustomAlerts from "../utills/customAlert/CustomAlerts";
+import { error$ } from "../store/customErrors";
+import { observer } from "@legendapp/state/react";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -22,10 +25,12 @@ const Register = () => {
     };
 
     api.signUp(data).then((res) => {
+      error$.message.set("");
+
       if (res.status === 1) {
         navigate("/login");
       } else {
-        alert(res.message.split(".")[1]);
+        error$.message.set(res?.message);
       }
     });
   };
@@ -42,6 +47,7 @@ const Register = () => {
             </label>
             <input
               style
+              required
               type="text"
               id="username"
               value={username}
@@ -56,6 +62,7 @@ const Register = () => {
             </label>
             <input
               type="email"
+              required
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -70,7 +77,8 @@ const Register = () => {
               Mobile Number
             </label>
             <input
-              type="text"
+              required
+              type="number"
               id="mobile"
               value={mobile}
               onChange={(e) => setMobile(e.target.value)}
@@ -84,6 +92,7 @@ const Register = () => {
               Password
             </label>
             <input
+              required
               type="password"
               id="password"
               value={password}
@@ -97,6 +106,7 @@ const Register = () => {
               Confirm Password
             </label>
             <input
+              required
               type="password"
               id="confirmPassword"
               value={confirmPassword}
@@ -108,6 +118,7 @@ const Register = () => {
           <button type="submit" style={styles.button}>
             Sign Up
           </button>
+          <CustomAlerts message={error$.message.get()} />
         </form>
         <p style={styles.footerText}>
           Already have an account?{" "}
@@ -202,4 +213,4 @@ const styles = {
   },
 };
 
-export default Register;
+export default observer(Register);

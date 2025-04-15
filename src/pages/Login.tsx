@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import httpHome from "../Api/httpHome";
+import CustomAlerts from "../utills/customAlert/CustomAlerts";
+import { observer } from "@legendapp/state/react";
+import { error$ } from "../store/customErrors";
+import { addToCart$ } from "../store/addToCart";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -18,9 +22,22 @@ const Login = () => {
       .then((res) => {
         if (res.status === 1) {
           localStorage.setItem("trideFairToken", res?.token);
+          localStorage.setItem("trideFairUserId", res?.data?.id);
+          localStorage.setItem("trideFairUser", JSON.stringify(res?.data));
           navigate("/");
+
+          api
+            .getCartCount({ user_id: localStorage.getItem("trideFairUserId") }) // Replace with dynamic user_id
+            .then((response) => {
+              if (response?.status === 1) {
+                addToCart$.cartItems.set(response?.cartqty);
+              }
+            });
         } else {
         }
+      })
+      .catch((err) => {
+        console.error(err);
       });
   };
 
@@ -59,7 +76,11 @@ const Login = () => {
           <button type="submit" style={styles.button}>
             Log In
           </button>
+          <div className="text-left text-red-700">
+            <CustomAlerts message={error$?.message?.get()} />
+          </div>
         </form>
+
         <p style={styles.footerText}>
           Don't have an account?{" "}
           <Link to="/Register" style={styles.link}>
@@ -153,4 +174,4 @@ const styles = {
   },
 };
 
-export default Login;
+export default observer(Login);

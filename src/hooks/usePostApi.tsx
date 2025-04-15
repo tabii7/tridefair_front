@@ -1,5 +1,6 @@
-'use client'
+"use client";
 import axios from "axios";
+import { error$ } from "../store/customErrors";
 
 const usePostApi = () => {
   const postApi = async (url, requestBody = {}, headers = {}) => {
@@ -14,16 +15,11 @@ const usePostApi = () => {
       });
 
       return response.data;
-    } catch (error) {
-        console.log(error);
-      console.error("API Error:", error?.response?.data || error.message);
-      
-      // Handle CORS error separately
-    //   if (error.response?.status === 403) {
-    //     return { error: "CORS error: Ensure backend allows this origin." };
-    //   }
+    } catch (error: any) {
+      console.log(error);
 
-      return { error: error.message };
+      error$.message.set(error?.response?.data?.message);
+      return { error: error };
     }
   };
 

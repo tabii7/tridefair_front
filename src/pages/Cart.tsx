@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus, CreditCard, Truck } from "lucide-react";
 import httpHome from "../Api/httpHome";
 import { addToCart$ } from "../store/addToCart";
@@ -7,18 +7,42 @@ import { addToCart$ } from "../store/addToCart";
 const Cart = () => {
   const api = httpHome();
   // Mock cart items
+  const navigate = useNavigate();
   const [items, setItems] = useState([]) as any;
 
   useEffect(() => {
-    api.getCart({ user_id: 1 }).then((res) => {
-      setItems(res?.data);
-      addToCart$.cartItems.set(res?.data?.length);
-    });
+    if (localStorage.getItem("trideFairToken")) {
+      api
+        .getCart({ user_id: localStorage.getItem("trideFairUserId") })
+        .then((res) => {
+          setItems(res?.data);
+          addToCart$.cartItems.set(res?.data?.length);
+        });
+    } else {
+      navigate("/login");
+    }
   }, []);
+
+  // Navugate to checkout page
+  const navigateToCheckout = () => {
+    api
+      .order({
+        items,
+        user_id: localStorage.getItem("trideFairUserId"),
+      })
+      .then((res) => {
+        if (res?.status == 1) {
+          console.log("res", res);
+          // navigate("/checkout");
+        }
+      });
+    console.log("items", items);
+  };
+
   const updateQuantity = (id: number, change: number) => {
     api
       .updateCartProduct({
-        user_id: 1,
+        user_id: localStorage.getItem("trideFairUserId"),
         cart_id: id,
         // qty: change,
         // add the Quantity in previous state
@@ -48,7 +72,7 @@ const Cart = () => {
   const removeItem = (id: number) => {
     api
       .deleteCartProduct({
-        user_id: 1,
+        user_id: localStorage.getItem("trideFairUserId"),
         cart_id: id,
       })
       .then((res) => {
@@ -58,13 +82,13 @@ const Cart = () => {
         }
       });
   };
-  const subtotal = items.reduce(
+  const subtotal = (items ?? []).reduce(
     (sum: number, item: any) =>
       sum + (Number(item.price) || 0) * (Number(item.qty) || 1),
     0
   );
 
-  const shipping = items.reduce(
+  const shipping = (items ?? []).reduce(
     (sum: number, item: any) => sum + (Number(item.shipping_cost) || 0),
     0
   );
@@ -80,7 +104,7 @@ const Cart = () => {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Cart Items */}
         <div className="flex-1">
-          {items.length > 0 ? (
+          {items?.length > 0 ? (
             <div className="bg-white rounded-lg shadow">
               {items.map((item: any, index: any) => (
                 <div
@@ -89,10 +113,13 @@ const Cart = () => {
                 >
                   <div className="flex gap-6">
                     <img
-                      src={item?.product_image}
+                      src={'https://tridefair.com/storage/images/products/' +
+                        item.product_image || ""}
                       alt={item?.product_name}
                       className="w-24 h-24 object-cover rounded-lg"
                     />
+
+
                     <div className="flex-1">
                       <div className="flex justify-between">
                         <div>
@@ -152,7 +179,7 @@ const Cart = () => {
         </div>
 
         {/* Order Summary */}
-        {items.length > 0 && (
+        {items?.length > 0 && (
           <div className="w-full lg:w-96">
             <div className="bg-white rounded-lg shadow p-6">
               <h2 className="text-xl font-bold mb-4">Order Summary</h2>
@@ -161,14 +188,7 @@ const Cart = () => {
                   <span>Subtotal</span>
                   <span>${subtotal.toFixed(2)}</span>
                 </div>
-                {/* <div className="flex justify-between">
-                  <span>Shipping</span>
-                  <span className="text-green-600">Free</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Estimated Tax</span>
-                  <span>${tax.toFixed(2)}</span>
-                </div> */}
+
                 <div className="border-t pt-3 font-bold text-lg">
                   <div className="flex justify-between">
                     <span>Total</span>
@@ -176,7 +196,10 @@ const Cart = () => {
                   </div>
                 </div>
               </div>
-              <button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center">
+              <button
+                onClick={() => navigateToCheckout()}
+                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center"
+              >
                 <CreditCard className="h-5 w-5 mr-2" />
                 Proceed to Checkout
               </button>

@@ -270,14 +270,12 @@ const Category = () => {
               >
                 <Link to={`/product/${product.id}`}>
                   <div className="relative">
-                    <img
-                      src={
-                        product.productimage?.[0]?.image ||
-                        "https://via.placeholder.com/500"
-                      }
-                      alt={product.product_name}
-                      className="w-full h-48 object-cover rounded-t-lg"
-                    />
+                  <img
+                    src={'https://tridefair.com/storage/images/products/' +
+                      product?.productimage?.image || ""}
+                    alt={product.product_name}
+                    className="w-full h-48 object-cover"
+                  />
                     <button className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow hover:bg-gray-100">
                       <Heart className="h-5 w-5 text-gray-600" />
                     </button>

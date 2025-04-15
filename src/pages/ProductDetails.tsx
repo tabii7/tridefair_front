@@ -34,7 +34,7 @@ const ProductDetails = () => {
   const addToCart = async () => {
     try {
       const response = await products.addToCart({
-        user_id: 1,
+        user_id: localStorage.getItem("trideFairUserId"),
         product_id: id,
         qty: quantity,
         price: product?.data?.product_price,
@@ -49,6 +49,7 @@ const ProductDetails = () => {
     } catch (error) {
       console.log(error);
     }
+
   };
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -57,7 +58,7 @@ const ProductDetails = () => {
         <div>
           <div className="aspect-square rounded-lg overflow-hidden mb-4">
             <img
-              src={
+              src={'https://tridefair.com/storage/images/products/' +
                 product?.data?.productimages?.[selectedImage]?.image_name || ""
               }
               alt={product?.data?.product_name || "Product Image"}
@@ -76,7 +77,7 @@ const ProductDetails = () => {
                 }`}
               >
                 <img
-                  src={image.image_name}
+                  src={'https://tridefair.com/storage/images/products/' + image.image_name}
                   alt={`Product ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
@@ -91,25 +92,7 @@ const ProductDetails = () => {
             {product?.data?.product_name}
           </h1>
 
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="flex items-center">
-              {Array(5)
-                .fill(null)
-                .map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-5 w-5 ${
-                      i < Math.floor(product?.data?.productaverageratting)
-                        ? "text-yellow-400 fill-current"
-                        : "text-gray-300"
-                    }`}
-                  />
-                ))}
-            </div>
-            <span className="text-blue-600">
-              {product?.data?.totalreview || 0} reviews
-            </span>
-          </div>
+        
 
           <div className="mb-6">
             <span className="text-3xl font-bold">

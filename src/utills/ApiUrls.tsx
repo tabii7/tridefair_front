@@ -1,11 +1,10 @@
 // import { all } from "axios";
 
-<<<<<<< Updated upstream
-const baseUrl = "http://192.168.100.48:8000/api";
-=======
 // const baseUrl = "http://192.168.100.48:8000/api";
 const baseUrl = "https://tridefair.com/api";
->>>>>>> Stashed changes
+// const baseUrl = "http://192.168.100.48:8000/api";
+const baseUrl = "https://tridefair.com/api";
+// const baseUrl = "https://my.tridefair.com/backend/public/api";
 
 const urls = {
   signUp: `${baseUrl}/register`,
@@ -23,5 +22,6 @@ const urls = {
   orderhistory: `${baseUrl}/orderhistory`,
   wishlist: `${baseUrl}/getwishlist`,
   deletewishlist: `${baseUrl}/removefromwishlist`,
+  placeOrder: `${baseUrl}/order`,
 };
 export default urls;

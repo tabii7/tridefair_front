@@ -19,6 +19,8 @@ import Register from "./pages/Register";
 import SellerRegistration from "./pages/SellerRegistration";
 import { addToCart$ } from "./store/addToCart";
 import httpHome from "./Api/httpHome";
+import CheckoutPage from "./pages/Checkout";
+import { error$ } from "./store/customErrors";
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("trideFairToken");
@@ -30,11 +32,12 @@ const PrivateRoute = ({ element }: { element: React.ReactNode }) => {
 
 function App() {
   const api = httpHome();
+  error$.message.set("");
 
   useEffect(() => {
     if (isAuthenticated()) {
       api
-        .getCartCount({ user_id: 1 }) // Replace with dynamic user_id
+        .getCartCount({ user_id: localStorage.getItem("trideFairUserId") }) // Replace with dynamic user_id
         .then((response) => {
           if (response?.status === 1) {
             addToCart$.cartItems.set(response?.cartqty);
@@ -57,6 +60,7 @@ function App() {
               path="/login"
               element={isAuthenticated() ? <Navigate to="/" /> : <Login />}
             />
+            <Route path="/checkout" element={<CheckoutPage />} />
             <Route
               path="/register"
               element={isAuthenticated() ? <Navigate to="/" /> : <Register />}
@@ -77,6 +81,11 @@ function App() {
               path="/wishlist"
               element={<PrivateRoute element={<Wishlist />} />}
             />
+
+            {/* <Route
+              path="/checkout"
+              element={<PrivateRoute element={<CheckoutPage />} />}
+            /> */}
 
             {/* Catch-all Route - Redirect to Home */}
             <Route path="*" element={<Navigate to="/" />} />
