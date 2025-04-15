@@ -2,6 +2,8 @@
 
 // const baseUrl = "http://192.168.100.48:8000/api";
 const baseUrl = "https://tridefair.com/api";
+// const baseUrl = "http://192.168.100.48:8000/api";
+const baseUrl = "https://tridefair.com/api";
 // const baseUrl = "https://my.tridefair.com/backend/public/api";
 
 const urls = {
