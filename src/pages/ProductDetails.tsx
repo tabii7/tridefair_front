@@ -92,25 +92,7 @@ const ProductDetails = () => {
             {product?.data?.product_name}
           </h1>
 
-          <div className="flex items-center space-x-4 mb-4">
-            <div className="flex items-center">
-              {Array(5)
-                .fill(null)
-                .map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-5 w-5 ${
-                      i < Math.floor(product?.data?.productaverageratting)
-                        ? "text-yellow-400 fill-current"
-                        : "text-gray-300"
-                    }`}
-                  />
-                ))}
-            </div>
-            <span className="text-blue-600">
-              {product?.data?.totalreview || 0} reviews
-            </span>
-          </div>
+        
 
           <div className="mb-6">
             <span className="text-3xl font-bold">
