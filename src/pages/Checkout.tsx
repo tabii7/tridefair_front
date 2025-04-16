@@ -125,7 +125,7 @@ const CheckoutPage = () => {
     0
   );
   const tax = cartItems.tax_rate_used; // Assuming no tax for this example
-  const taxAmount = cartItems.tax_amount; // Assuming no tax for this example
+  const taxAmount = cartItems.tax_amount || 0; // Assuming no tax for this example
   const grandTotal =
     Number(subtotal) + Number(shippingCost) + Number(taxAmount);
 
@@ -160,8 +160,31 @@ const CheckoutPage = () => {
     setShowEditAddress(true);
   };
 
+  const isAddressFormValid = () => {
+    const requiredFields = [
+      "country",
+      "firstName",
+      "lastName",
+      "street_address",
+      "city",
+      "state",
+      "zipCode",
+      "email",
+      "confirmEmail",
+      "countryCode",
+      "phoneNumber",
+    ];
+    return requiredFields.every((field) => addressForm[field].trim() !== "");
+  };
+
   // Handle payment method change
   const handlePaymentMethodChange = (method) => {
+    if (!isAddressFormValid()) {
+      alert(
+        "Please complete all required address fields before selecting a payment method."
+      );
+      return;
+    }
     addToCart$.checkOutData.set({
       cartItems,
       addressForm,
