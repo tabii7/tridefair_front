@@ -40,38 +40,87 @@ const Home = () => {
   }
 
   // Top deals with real products
-  const deals = [
+  const categories = [
     {
       id: 1,
-      title: "Wireless Fast Charging Pad",
-      discount: 50,
+      title: "Digital Marketplace",
+      subtitle: "SVG, Templates & More",
       image:
-        "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=500&auto=format&fit=crop",
-      price: 4.31,
+        "https://images.unsplash.com/photo-1618761714954-0b8cd0026356?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      url: "/category/4",
     },
     {
       id: 2,
-      title: "360° Phone Holder with Charger",
-      discount: 45,
+      title: "Electronics",
+      subtitle: "Latest Gadgets",
       image:
-        "https://images.unsplash.com/photo-1617997455403-41f36e9a8c9d?w=500&auto=format&fit=crop",
-      price: 9.14,
+        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      url: "/category/1",
     },
     {
       id: 3,
-      title: "LED Charging Cable",
-      discount: 40,
+      title: "Fashion",
+      subtitle: "Trending Styles",
       image:
-        "https://images.unsplash.com/photo-1618577608401-38de4f0b9ea9?w=500&auto=format&fit=crop",
-      price: 1.54,
+        "https://images.unsplash.com/photo-1551232864-3f0890e580d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      url: "/category/2",
     },
     {
       id: 4,
-      title: "Magnetic Phone Stand",
-      discount: 35,
+      title: "Home & Living",
+      subtitle: "Home Essentials",
       image:
-        "https://images.unsplash.com/photo-1612100577176-a433ec5a2f45?w=500&auto=format&fit=crop",
-      price: 3.44,
+        "https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      url: "/category/9",
+    },
+    {
+      id: 5,
+      title: "Beauty & Personal Care",
+      subtitle: "",
+      image: "",
+      url: "/category/5",
+    },
+    {
+      id: 6,
+      title: "Sports & Outdoors",
+      subtitle: "",
+      image: "",
+      url: "/category/6",
+    },
+    {
+      id: 7,
+      title: "Toys & Games",
+      subtitle: "",
+      image: "",
+      url: "/category/8",
+    },
+    {
+      id: 8,
+      title: "Books & Media",
+      subtitle: "",
+      image: "",
+      url: "/category/3",
+    },
+    {
+      id: 9,
+      title: "Office ",
+      subtitle: "",
+      image: "",
+      url: "/category/10",
+    },
+    {
+      id: 10,
+      title: "Garden & Tools",
+      subtitle: "",
+      image: "",
+      url: "/category/9",
+    },
+    {
+      id: 11,
+      title: "Kitchen",
+      subtitle: "",
+      image: "",
+      url: "/category/8",
     },
   ];
 
@@ -101,30 +150,58 @@ const Home = () => {
 
       {/* Daily Deals */}
       <section className="mb-12">
-        <h2 className="text-2xl font-bold mb-6">Today's Best Deals</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {deals.map((deal) => (
-            <Link
-              key={deal.id}
-              to={`/product/${deal.id}`}
-              className="group relative rounded-lg overflow-hidden"
-            >
-              <img
-                src={deal.image}
-                alt={deal.title}
-                className="w-full h-48 object-cover group-hover:scale-105 transition-transform"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                <div className="text-white">
-                  <h3 className="font-semibold mb-1">{deal.title}</h3>
-                  <p className="text-xl font-bold">
-                    Up to {deal.discount}% Off
-                  </p>
-                  <p className="text-lg">Starting at ${deal.price}</p>
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {categories.slice(0, 4).map((category) => (
+              <Link key={category.id} to={category.url} className="block group">
+                <div className="bg-white rounded-lg shadow overflow-hidden transition-all duration-300 hover:shadow-md">
+                  {category.image && (
+                    <div className="h-[200px] overflow-hidden">
+                      <img
+                        src={category.image}
+                        alt={category.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <h3 className="text-lg font-medium text-gray-900">
+                      {category.title}
+                    </h3>
+                    {category.subtitle && (
+                      <p className="mt-1 text-sm text-gray-600">
+                        {category.subtitle}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+            {categories.slice(4, 8).map((category) => (
+              <Link key={category.id} to={category.url} className="block">
+                <div className="bg-white rounded-lg shadow p-4 transition-all duration-300 hover:shadow-md">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    {category.title}
+                  </h3>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+            {categories.slice(8, 12).map((category) => (
+              <Link key={category.id} to={category.url} className="block">
+                <div className="bg-white rounded-lg shadow p-4 transition-all duration-300 hover:shadow-md">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    {category.title}
+                  </h3>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -144,8 +221,10 @@ const Home = () => {
               <Link to={`/product/${product.id}`}>
                 <div className="relative">
                   <img
-                    src={'https://tridefair.com/storage/images/products/' +
-                      product?.productimage?.image || ""}
+                    src={
+                      "https://tridefair.com/storage/images/products/" +
+                        product?.productimage?.image || ""
+                    }
                     alt={product.product_name}
                     className="w-full h-48 object-cover"
                   />
@@ -178,52 +257,6 @@ const Home = () => {
                 </div>
               </Link>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Categories Grid */}
-      <section>
-        <h2 className="text-2xl font-bold mb-6">Shop by Category</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {[
-            {
-              name: "Chargers",
-              image:
-                "https://images.unsplash.com/photo-1612100577176-a433ec5a2f45?w=500&auto=format&fit=crop",
-            },
-            {
-              name: "Power Banks",
-              image:
-                "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=500&auto=format&fit=crop",
-            },
-            {
-              name: "Cables",
-              image:
-                "https://images.unsplash.com/photo-1618577608401-38de4f0b9ea9?w=500&auto=format&fit=crop",
-            },
-            {
-              name: "Phone Holders",
-              image:
-                "https://images.unsplash.com/photo-1617997455403-41f36e9a8c9d?w=500&auto=format&fit=crop",
-            },
-          ].map((category) => (
-            <Link
-              key={category.name}
-              to={`/category/${category.name.toLowerCase()}`}
-              className="group relative h-40 rounded-lg overflow-hidden"
-            >
-              <img
-                src={category.image}
-                alt={category.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-              />
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors flex items-center justify-center">
-                <h3 className="text-white text-xl font-bold">
-                  {category.name}
-                </h3>
-              </div>
-            </Link>
           ))}
         </div>
       </section>
