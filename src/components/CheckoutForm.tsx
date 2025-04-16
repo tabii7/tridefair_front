@@ -4,6 +4,7 @@ import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { addToCart$ } from "../store/addToCart";
 import httpHome from "../Api/httpHome";
 import { observer } from "@legendapp/state/react";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -13,6 +14,7 @@ const CheckoutForm = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
   const api = httpHome();
+  const navigate = useNavigate();
 
   const confirmOrder = async () => {
     await api
@@ -26,6 +28,8 @@ const CheckoutForm = () => {
       })
       .then((res) => {
         if (res?.status == 1) {
+          addToCart$?.cartItems?.set(0);
+          navigate("/");
         }
       });
   };
