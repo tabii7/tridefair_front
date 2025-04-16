@@ -1,7 +1,9 @@
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useState } from "react";
-import { Loader2, CheckCircle2, XCircle } from "lucide-react"; // Optional icons
+import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { addToCart$ } from "../store/addToCart";
+import httpHome from "../Api/httpHome";
+import { observer } from "@legendapp/state/react";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -9,6 +11,22 @@ const CheckoutForm = () => {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [paymentDetails, setPaymentDetails] = useState<any>({});
+  const api = httpHome();
+
+  const confirmOrder = async () => {
+    await api
+      .order({
+        items: addToCart$?.checkOutData?.get(),
+        user_id: localStorage.getItem("trideFairUserId"),
+        orderDetails: paymentDetails,
+        payment_type: "4",
+      })
+      .then((res) => {
+        if (res?.status == 1) {
+        }
+      });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,27 +37,45 @@ const CheckoutForm = () => {
     if (!stripe || !elements) return;
 
     const cardElement = elements.getElement(CardElement);
-    console.log("cardElement", addToCart$.checkOutData.get());
+    const amount: any =
+      (addToCart$?.checkOutData?.cartItems?.grand_total?.get() * 100).toFixed(
+        0
+      ) || 0;
+    console.log(
+      "addToCart$?.checkOutData?.get()",
+      addToCart$.checkOutData.get()
+    );
     try {
-      const res = await fetch("/create-payment-intent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: localStorage.getItem("trideFairUserId"),
-          amount: addToCart$?.checkOutData?.cartItems?.grand_total?.get(), // Amount in the smallest currency unit (e.g., cents for USD)
-          currency: "usd", // Currency code (e.g., 'usd' for US Dollars)
-        }), // Example: $10
-      });
-      const { clientSecret } = await res.json();
+      const stripeSecretKey = import.meta.env.VITE_SECREAT_KEY;
 
-      const result = await stripe.confirmCardPayment(clientSecret, {
+      const res = await fetch("https://api.stripe.com/v1/payment_intents", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${stripeSecretKey}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          amount: amount, // in cents
+          currency: "usd",
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!data.client_secret) {
+        throw new Error(
+          data.error?.message || "Failed to create payment intent."
+        );
+      }
+
+      const result = await stripe.confirmCardPayment(data.client_secret, {
         payment_method: {
           card: cardElement!,
           billing_details: {
             name:
-              addToCart$?.checkOutData?.addressForm?.firstName +
+              addToCart$?.checkOutData?.addressForm?.firstName.get() +
               " " +
-              addToCart$?.checkOutData?.addressForm?.lastName,
+              addToCart$?.checkOutData?.addressForm?.lastName.get(),
           },
         },
       });
@@ -47,10 +83,13 @@ const CheckoutForm = () => {
       if (result.error) {
         setError(result.error.message ?? "Something went wrong.");
       } else if (result.paymentIntent.status === "succeeded") {
+        setPaymentDetails(result?.paymentIntent?.id);
+        console.log(result?.paymentIntent?.id);
+        confirmOrder();
         setSuccess("🎉 Payment successful!");
       }
-    } catch (err) {
-      setError("Network error. Please try again.");
+    } catch (err: any) {
+      setError(err.message || "Network error. Please try again.");
     }
 
     setProcessing(false);
@@ -101,4 +140,4 @@ const CheckoutForm = () => {
   );
 };
 
-export default CheckoutForm;
+export default observer(CheckoutForm);

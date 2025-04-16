@@ -25,18 +25,7 @@ const Cart = () => {
 
   // Navugate to checkout page
   const navigateToCheckout = () => {
-    api
-      .order({
-        items,
-        user_id: localStorage.getItem("trideFairUserId"),
-      })
-      .then((res) => {
-        if (res?.status == 1) {
-          console.log("res", res);
-        }
-        navigate("/checkout");
-      });
-    console.log("items", items);
+    navigate("/checkout");
   };
 
   const updateQuantity = (id: number, change: number) => {

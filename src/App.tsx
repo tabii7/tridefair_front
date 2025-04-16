@@ -24,9 +24,8 @@ import { error$ } from "./store/customErrors";
 
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-const stripePromise = loadStripe(
-  "pk_live_51LO9wIAzUG7NporpyPNEiUGxD8919cadEmkIqHd1Bd3ASCAUtQ1yKj9gA6n7HJxjTuYTweDUqtXlqvvuvi2k1QLq00W0qRBbMW"
-);
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("trideFairToken");
 

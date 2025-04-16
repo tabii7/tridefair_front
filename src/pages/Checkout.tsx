@@ -24,8 +24,12 @@ const CheckoutPage = () => {
         state: "ohio",
       })
       .then((res) => {
-        console.log("res", res?.cartdata);
         setCartItems(res);
+        addToCart$.checkOutData.set({
+          cartItems: res,
+          addressForm,
+        });
+        // console.log("res", addToCart$.checkOutData.get());
       });
   }, [location.location]);
 
@@ -122,25 +126,6 @@ const CheckoutPage = () => {
   const taxAmount = cartItems.tax_amount; // Assuming no tax for this example
   const grandTotal =
     Number(subtotal) + Number(shippingCost) + Number(taxAmount);
-
-  // Handle quantity changes
-  // const handleQuantityChange = (id: any, action: any) => {
-  //   setCartItems(
-  //     cartItems.map((item) => {
-  //       if (item.id === id) {
-  //         const newQty =
-  //           action === "increase" ? item.qty + 1 : Math.max(1, item.qty - 1);
-  //         return { ...item, qty: newQty };
-  //       }
-  //       return item;
-  //     })
-  //   );
-  // };
-
-  // Handle remove item
-  // const handleRemoveItem = (id) => {
-  //   setCartItems(cartItems.filter((item) => item.id !== id));
-  // };
 
   // Handle address form changes
   const handleAddressChange = (e) => {
