@@ -65,7 +65,9 @@ const CheckoutPage = () => {
     phoneNumber: "",
   });
 
-  const handleFormData = () => {
+  const handleFormData = (e: React.FormEvent) => {
+    e.preventDefault(); // Should stop the reload
+    console.log("Submitting...");
     addToCart$.checkOutData.set({
       cartItems,
       addressForm,
@@ -160,6 +162,10 @@ const CheckoutPage = () => {
 
   // Handle payment method change
   const handlePaymentMethodChange = (method) => {
+    addToCart$.checkOutData.set({
+      cartItems,
+      addressForm,
+    });
     setPaymentMethod(method);
   };
 
@@ -269,7 +275,9 @@ const CheckoutPage = () => {
             </div> */}
             <div className="flex justify-between">
               <span>Tax</span>
-              <span>${tax}</span>
+              <span>
+                ${taxAmount.toFixed(2)}({tax})
+              </span>
             </div>
           </div>
 
@@ -624,13 +632,13 @@ const CheckoutPage = () => {
                 </div>
 
                 <div className="pt-4">
-                  <button
-                    type="button"
-                    onClick={() => handleFormData()}
+                  {/* <button
+                    type="submit"
+                    // onClick={() => handleFormData()}
                     className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-sm"
                   >
                     Save Shipping Address
-                  </button>
+                  </button> */}
                 </div>
               </form>
             </div>
@@ -665,7 +673,7 @@ const CheckoutPage = () => {
                     </button>
                   </div>
 
-                  <form className="space-y-6">
+                  <form className="space-y-6" onSubmit={handleFormData}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* Country Selection */}
                       <div className="md:col-span-2">
@@ -1081,7 +1089,7 @@ const CheckoutPage = () => {
                 ></div>
               )}
 
-              <button
+              {/* <button
                 onClick={handleProceedToPayment}
                 className={`px-6 py-3 bg-black text-white rounded-lg font-medium ${
                   !acceptTerms && "opacity-70 cursor-not-allowed"
@@ -1089,7 +1097,7 @@ const CheckoutPage = () => {
                 disabled={!acceptTerms}
               >
                 Proceed to payment
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

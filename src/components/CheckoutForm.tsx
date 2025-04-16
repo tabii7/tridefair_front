@@ -11,16 +11,18 @@ const CheckoutForm = () => {
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [paymentDetails, setPaymentDetails] = useState<any>({});
+  const [paymentDetails, setPaymentDetails] = useState<any>(null);
   const api = httpHome();
 
   const confirmOrder = async () => {
     await api
       .order({
-        items: addToCart$?.checkOutData?.get(),
+        items: addToCart$?.checkOutData?.addressForm?.get(),
         user_id: localStorage.getItem("trideFairUserId"),
-        orderDetails: paymentDetails,
+        orderDetails: paymentDetails || localStorage.getItem("payment_id"),
         payment_type: "4",
+        grand_total: addToCart$?.checkOutData?.cartItems?.grand_total?.get(),
+        tax: addToCart$?.checkOutData?.cartItems?.tax_rate_used?.get(),
       })
       .then((res) => {
         if (res?.status == 1) {
@@ -41,10 +43,6 @@ const CheckoutForm = () => {
       (addToCart$?.checkOutData?.cartItems?.grand_total?.get() * 100).toFixed(
         0
       ) || 0;
-    console.log(
-      "addToCart$?.checkOutData?.get()",
-      addToCart$.checkOutData.get()
-    );
     try {
       const stripeSecretKey = import.meta.env.VITE_SECREAT_KEY;
 
@@ -84,6 +82,7 @@ const CheckoutForm = () => {
         setError(result.error.message ?? "Something went wrong.");
       } else if (result.paymentIntent.status === "succeeded") {
         setPaymentDetails(result?.paymentIntent?.id);
+        localStorage.setItem("payment_id", result?.paymentIntent?.id);
         console.log(result?.paymentIntent?.id);
         confirmOrder();
         setSuccess("🎉 Payment successful!");
