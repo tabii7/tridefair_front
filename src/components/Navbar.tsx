@@ -31,6 +31,10 @@ const Navbar = () => {
 
   const [location, setLocation] = useState("Fetching location..."); // Default loading message
   const navigate = useNavigate();
+  const [token, setToken] = useState(localStorage.getItem("trideFairToken"));
+  useEffect(() => {
+    setToken(localStorage.getItem("trideFairToken"));
+  }, []);
 
   useEffect(() => {
     // Automatically fetch location when the component mounts
@@ -241,14 +245,35 @@ const Navbar = () => {
               <span>Sell</span>
             </Link>
             <div className="relative">
-              <button
+              {/* if token available then show Account button else show Login Button */}
+
+              {token ? (
+                <button
+                  className="flex items-center space-x-1 hover:text-gray-200"
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                >
+                  <User className="h-5 w-5" />
+                  <span>Account</span>
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  className="flex items-center space-x-1 hover:text-gray-200"
+                >
+                  <User className="h-5 w-5" />
+                  <span>Login</span>
+                </Link>
+              )}
+
+              {/* <button
                 className="flex items-center space-x-1 hover:text-gray-200"
                 onClick={() => setShowUserMenu(!showUserMenu)}
               >
                 <User className="h-5 w-5" />
                 <span>Account</span>
                 <ChevronDown className="h-4 w-4" />
-              </button>
+              </button>  */}
               {showUserMenu && (
                 <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50">
                   <Link
