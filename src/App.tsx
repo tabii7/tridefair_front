@@ -65,7 +65,11 @@ function App() {
                 path="/login"
                 element={isAuthenticated() ? <Navigate to="/" /> : <Login />}
               />
-              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route
+                path="/checkout"
+                // element={<CheckoutPage />}
+                element={<PrivateRoute element={<CheckoutPage />} />}
+              />
               <Route
                 path="/register"
                 element={isAuthenticated() ? <Navigate to="/" /> : <Register />}

@@ -32,6 +32,10 @@ const ProductDetails = () => {
   }
 
   const addToCart = async () => {
+    if (!localStorage.getItem("trideFairUserId")) {
+      alert("Please login to add product to cart");
+      return;
+    }
     try {
       const response = await products.addToCart({
         user_id: localStorage.getItem("trideFairUserId"),
@@ -49,7 +53,6 @@ const ProductDetails = () => {
     } catch (error) {
       console.log(error);
     }
-
   };
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -58,8 +61,10 @@ const ProductDetails = () => {
         <div>
           <div className="aspect-square rounded-lg overflow-hidden mb-4">
             <img
-              src={'https://tridefair.com/storage/images/products/' +
-                product?.data?.productimages?.[selectedImage]?.image_name || ""
+              src={
+                "https://tridefair.com/storage/images/products/" +
+                  product?.data?.productimages?.[selectedImage]?.image_name ||
+                ""
               }
               alt={product?.data?.product_name || "Product Image"}
               className="w-full h-full object-cover"
@@ -77,7 +82,10 @@ const ProductDetails = () => {
                 }`}
               >
                 <img
-                  src={'https://tridefair.com/storage/images/products/' + image.image_name}
+                  src={
+                    "https://tridefair.com/storage/images/products/" +
+                    image.image_name
+                  }
                   alt={`Product ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
