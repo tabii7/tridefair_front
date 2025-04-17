@@ -102,7 +102,10 @@ const Cart = () => {
                 >
                   <div className="flex gap-6">
                     <img
-                      src={item?.product_image}
+                      src={
+                        "https://tridefair.com/storage/images/products/" +
+                        item?.product_image
+                      }
                       alt={item?.product_name}
                       className="w-24 h-24 object-cover rounded-lg"
                     />

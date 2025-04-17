@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import httpHome from "../Api/httpHome";
 import {
   Search,
@@ -28,13 +28,18 @@ const Navbar = () => {
   const [showCategories, setShowCategories] = useState(false);
   const [showMainMenu, setShowMainMenu] = useState(false);
   const [categories, setcategories] = useState([]);
-
+  const path = useLocation();
   const [location, setLocation] = useState("Fetching location..."); // Default loading message
   const navigate = useNavigate();
-  const [token, setToken] = useState(localStorage.getItem("trideFairToken"));
+  const [token, setToken] = useState<any>("");
+
+  // Trigger a re-render when the path changes
+
   useEffect(() => {
-    setToken(localStorage.getItem("trideFairToken"));
-  }, []);
+    const storedToken = localStorage.getItem("trideFairToken");
+    setToken(storedToken);
+    setShowUserMenu(false);
+  }, [token, path.pathname]);
 
   useEffect(() => {
     // Automatically fetch location when the component mounts
@@ -248,14 +253,55 @@ const Navbar = () => {
               {/* if token available then show Account button else show Login Button */}
 
               {token ? (
-                <button
-                  className="flex items-center space-x-1 hover:text-gray-200"
-                  onClick={() => setShowUserMenu(!showUserMenu)}
-                >
-                  <User className="h-5 w-5" />
-                  <span>Account</span>
-                  <ChevronDown className="h-4 w-4" />
-                </button>
+                <div>
+                  <button
+                    className="flex items-center space-x-1 hover:text-gray-200"
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                  >
+                    <User className="h-5 w-5" />
+                    <span>Account</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50">
+                      <Link
+                        to="/account"
+                        className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"
+                      >
+                        <User className="h-4 w-4 mr-2" />
+                        <span>Profile</span>
+                      </Link>
+                      <Link
+                        to="/orders"
+                        className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"
+                      >
+                        <Package className="h-4 w-4 mr-2" />
+                        <span>Orders</span>
+                      </Link>
+                      <Link
+                        to="/wishlist"
+                        className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"
+                      >
+                        <Heart className="h-4 w-4 mr-2" />
+                        <span>Wishlist</span>
+                      </Link>
+                      <Link
+                        to="/settings"
+                        className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"
+                      >
+                        <Settings className="h-4 w-4 mr-2" />
+                        <span>Settings</span>
+                      </Link>
+                      <button
+                        onClick={() => handleSignOut()}
+                        className="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <Link
                   to="/login"
@@ -264,60 +310,6 @@ const Navbar = () => {
                   <User className="h-5 w-5" />
                   <span>Login</span>
                 </Link>
-              )}
-
-              {/* <button
-                className="flex items-center space-x-1 hover:text-gray-200"
-                onClick={() => setShowUserMenu(!showUserMenu)}
-              >
-                <User className="h-5 w-5" />
-                <span>Account</span>
-                <ChevronDown className="h-4 w-4" />
-              </button>  */}
-              {showUserMenu && (
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 z-50">
-                  <Link
-                    to="/account"
-                    className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"
-                  >
-                    <User className="h-4 w-4 mr-2" />
-                    <span>Profile</span>
-                  </Link>
-                  <Link
-                    to="/orders"
-                    className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"
-                  >
-                    <Package className="h-4 w-4 mr-2" />
-                    <span>Orders</span>
-                  </Link>
-                  <Link
-                    to="/wishlist"
-                    className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"
-                  >
-                    <Heart className="h-4 w-4 mr-2" />
-                    <span>Wishlist</span>
-                  </Link>
-                  <Link
-                    to="/settings"
-                    className="flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"
-                  >
-                    <Settings className="h-4 w-4 mr-2" />
-                    <span>Settings</span>
-                  </Link>
-                  <button
-                    // onClick={() => {
-                    //   localStorage.removeItem("trideFairToken");
-                    //   localStorage.removeItem("trideFairUserId");
-                    //   localStorage.removeItem("trideFairUser");
-                    //   navigate("/login");
-                    // }}
-                    onClick={() => handleSignOut()}
-                    className="w-full flex items-center px-4 py-2 text-gray-700 hover:bg-blue-50"
-                  >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    <span>Sign Out</span>
-                  </button>
-                </div>
               )}
             </div>
             <Bell className="h-5 w-5 cursor-pointer" />
