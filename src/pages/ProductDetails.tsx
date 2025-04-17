@@ -28,7 +28,14 @@ const ProductDetails = () => {
   }, [id]);
 
   if (!product) {
-    return <div className="text-center py-10">Loading product details...</div>;
+    return (
+      <div>
+        {/* <div className="text-center py-10">Loading product details...</div>; */}
+        <div className="max-w-7xl mx-auto px-4 py-8 flex justify-center items-center">
+          <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+        </div>
+      </div>
+    );
   }
 
   const addToCart = async () => {

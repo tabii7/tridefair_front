@@ -212,52 +212,59 @@ const Home = () => {
             ? "Products"
             : "Featured Products"}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProducts?.map((product) => (
-            <div
-              key={product.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
-            >
-              <Link to={`/product/${product.id}`}>
-                <div className="relative">
-                  <img
-                    src={
-                      "https://tridefair.com/storage/images/products/" +
-                        product?.productimage?.image || ""
-                    }
-                    alt={product.product_name}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm">
-                    {product.discount_percentage}% OFF
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-lg mb-2 line-clamp-2">
-                    {product.product_name}
-                  </h3>
-                  <div className="flex items-center mb-2">
-                    <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                    <span className="ml-1">{product?.rattings}</span>
-                    {/* <span className="text-sm text-gray-500 ml-2">({product.reviews.toLocaleString()})</span> */}
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="text-xl font-bold">
-                        ${product.discounted_price}
-                      </p>
-                      <p className="text-sm text-gray-500 line-through">
-                        ${product.originalPrice}
-                      </p>
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          {featuredProducts && featuredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                >
+                  <Link to={`/product/${product.id}`}>
+                    <div className="relative">
+                      <img
+                        src={
+                          "https://tridefair.com/storage/images/products/" +
+                            product?.productimage?.image || ""
+                        }
+                        alt={product.product_name}
+                        className="w-full h-48 object-cover"
+                      />
+                      <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-sm">
+                        {product.discount_percentage}% OFF
+                      </div>
                     </div>
-                    <button className="text-gray-500 hover:text-red-500">
-                      <Heart className="h-5 w-5" />
-                    </button>
-                  </div>
+                    <div className="p-4">
+                      <h3 className="font-semibold text-lg mb-2 line-clamp-2">
+                        {product.product_name}
+                      </h3>
+                      <div className="flex items-center mb-2">
+                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                        <span className="ml-1">{product?.rattings}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="text-xl font-bold">
+                            ${product.discounted_price}
+                          </p>
+                          <p className="text-sm text-gray-500 line-through">
+                            ${product.originalPrice}
+                          </p>
+                        </div>
+                        <button className="text-gray-500 hover:text-red-500">
+                          <Heart className="h-5 w-5" />
+                        </button>
+                      </div>
+                    </div>
+                  </Link>
                 </div>
-              </Link>
+              ))}
             </div>
-          ))}
+          ) : (
+            <div className="flex justify-center items-center py-20">
+              <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+            </div>
+          )}
         </div>
       </section>
     </div>

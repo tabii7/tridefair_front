@@ -53,8 +53,11 @@ const Category = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <p>Loading...</p>
+      // <div className="max-w-7xl mx-auto px-4 py-8">
+      //   <p>Loading...</p>
+      // </div>
+      <div className="max-w-7xl mx-auto px-4 py-8 flex justify-center items-center">
+        <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
       </div>
     );
   }
