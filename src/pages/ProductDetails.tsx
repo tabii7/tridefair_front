@@ -53,7 +53,6 @@ const ProductDetails = () => {
       });
       if (response?.status === 1) {
         addToCart$.cartItems.set((prev) => prev + 1);
-        // addToCart$.disableCartButton.set((prev: any) => [...prev, id]);
       } else {
         alert("Failed to add product to cart.");
       }
