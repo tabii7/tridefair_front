@@ -139,7 +139,7 @@ const Navbar = () => {
     <nav className="bg-blue-900 text-white">
       <div className="">
         {/* Top Bar */}
-        <div className="px-4 py-2 flex  border-b border-blue-800">
+        <div className="px-4 py-2 flex flex-wrap border-b border-blue-800">
           <div className="flex items-center space-x-2">
             <div className="relative">
               <div className="flex items-center ">
@@ -191,8 +191,8 @@ const Navbar = () => {
           </div>
           {/* Search Bar */}
           <div
-            className="px-4 py-3 flex items-center space-x-4 "
-            style={{ width: "70%" }}
+            className="px-4 py-3 flex items-center space-x-4 sm:w-full md:w-[50%] lg:w-[60%] xl:w-[60%]"
+            // style={{ width: "70%" }}
           >
             <div className="flex-1 flex">
               <div className="relative">
@@ -222,7 +222,7 @@ const Navbar = () => {
                   name="search"
                   onChange={(e) => setSearchQuery(e.target.value)}
                   type="text"
-                  placeholder="Search for anything"
+                  placeholder="Search"
                   className="w-full h-10 px-4 text-gray-900 focus:outline-none border-0 rounded-r-lg"
                 />
                 <Search

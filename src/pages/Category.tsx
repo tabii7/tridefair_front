@@ -155,7 +155,9 @@ const Category = () => {
 
       <div className="flex gap-6">
         {/* Filters Sidebar */}
-        <div className="w-64 flex-shrink-0">
+        {/* hide the sidebar on mobile */}
+
+        <div className="w-64 flex-shrink-0 hidden md:block">
           <div className="bg-white rounded-lg shadow p-4">
             <div className="flex items-center space-x-2 mb-4">
               <Sliders className="h-5 w-5" />
@@ -218,7 +220,7 @@ const Category = () => {
               </div>
             ) : (
               // Original filters for non-digital categories
-              <div className="space-y-6">
+              <div className="space-y-6 ">
                 <div>
                   <h3 className="font-medium mb-2">Price Range</h3>
                   <select
@@ -270,12 +272,14 @@ const Category = () => {
               >
                 <Link to={`/product/${product.id}`}>
                   <div className="relative">
-                  <img
-                    src={'https://tridefair.com/storage/images/products/' +
-                      product?.productimage?.image || ""}
-                    alt={product.product_name}
-                    className="w-full h-48 object-cover"
-                  />
+                    <img
+                      src={
+                        "https://tridefair.com/storage/images/products/" +
+                          product?.productimage?.image || ""
+                      }
+                      alt={product.product_name}
+                      className="w-full h-48 object-cover"
+                    />
                     <button className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow hover:bg-gray-100">
                       <Heart className="h-5 w-5 text-gray-600" />
                     </button>
